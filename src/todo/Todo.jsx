@@ -1,3 +1,17 @@
+import React, { useState, useEffect } from "react";
+import PageHeader from "../template/PageHeader";
+import TodoForm from "./TodoForm";
+import TodoList from "./TodoList";
+
+export default function Todo() {
+  const [description, setDescription] = useState("");
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    setList(loadFromStorage());
+  }, []);
+}
+
 const STORAGE_KEY = "todos_react_portfolio_v1";
 
 function makeId() {
