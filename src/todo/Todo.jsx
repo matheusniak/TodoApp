@@ -12,6 +12,37 @@ export default function Todo() {
   }, []);
 }
 
+function refreshFiltered(desc = "") {
+  const all = loadFromStorage()
+    .slice()
+    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  if (!desc) return setList(all);
+  const filtered = all.filter((t) =>
+    t.description.toLowerCase().includes(desc.toLowerCase())
+  );
+  setList(filtered);
+}
+
+function handleChange(e) {
+  setDescription(e.target.value);
+}
+function handleSearch() {
+  refreshFiltered(description);
+}
+function handleAdd() {
+  if (!description.trim()) return;
+  const newTodo = {
+    _id: makeId(),
+    description: description.trim(),
+    done: false,
+    createdAt: Date.now(),
+  };
+  const all = [newTodo, ...loadFromStorage()];
+  saveToStorage(all);
+  setDescription("");
+  setList(all);
+}
+
 const STORAGE_KEY = "todos_react_portfolio_v1";
 
 function makeId() {
